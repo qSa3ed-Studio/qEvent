@@ -53,6 +53,6 @@ jobs:
         if: matrix.java == '21'
         uses: actions/upload-artifact@v4
         with:
-          name: qEvent-1.0.0
-          path: target/qEvent-1.0.0.jar
+          name: qEvent-plugin
+          path: target/qEvent-*.jar
           if-no-files-found: error

@@ -14,7 +14,7 @@ RCON_PASSWORD="qevent-test"
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SERVER_DIR="${ROOT}/.testservers/${VERSION}"
-JAR_SOURCE="${ROOT}/target/qEvent-1.0.0.jar"
+JAR_SOURCE="$(ls "${ROOT}"/target/qEvent-*.jar 2>/dev/null | head -1)"
 PAPER_JAR="${ROOT}/.testservers/jars/paper-${VERSION}.jar"
 
 if [[ ! -f "${JAR_SOURCE}" ]]; then
