@@ -1,0 +1,80 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "qevent:font/caps.png",
+      "ascent": 12,
+      "height": 16,
+      "chars": [
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "qevent:font/lower.png",
+      "ascent": 12,
+      "height": 16,
+      "chars": [
+        "abcdefghijklmnopqrstuvwxyz"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "qevent:font/digits.png",
+      "ascent": 12,
+      "height": 16,
+      "chars": [
+        "0123456789"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "qevent:font/narrow.png",
+      "ascent": 12,
+      "height": 16,
+      "chars": [
+        "!?.,;:'\"()[]-+"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "qevent:gui/badge.png",
+      "ascent": 12,
+      "height": 16,
+      "chars": [
+        "\ue100"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "qevent:gui/bracket_left.png",
+      "ascent": 12,
+      "height": 20,
+      "chars": [
+        "\ue101"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "qevent:gui/bracket_right.png",
+      "ascent": 12,
+      "height": 20,
+      "chars": [
+        "\ue102"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "qevent:gui/divider.png",
+      "ascent": 6,
+      "height": 6,
+      "chars": [
+        "\ue103"
+      ]
+    },
+    {
+      "type": "reference",
+      "id": "minecraft:default"
+    }
+  ]
+}

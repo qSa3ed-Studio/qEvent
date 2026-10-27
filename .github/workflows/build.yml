@@ -1,0 +1,57 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and test (JDK ${{ matrix.java }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 21 = the release target (Paper 1.20.5+); 25 = the runtime of the current Paper line.
+        java: ['21', '25']
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+          cache: maven
+
+      - name: Build and run unit tests
+        run: mvn -B --no-transfer-progress clean verify
+
+      - name: Validate the produced JAR
+        run: |
+          set -euo pipefail
+          JAR="target/qEvent-1.0.0.jar"
+          test -f "$JAR"
+          unzip -p "$JAR" plugin.yml | grep -E "^version: '1\.0\.0'" >/dev/null
+          unzip -p "$JAR" plugin.yml | grep -E "^main: studio\.q\.qevent\.QEventPlugin" >/dev/null
+          unzip -l "$JAR" | grep -E "config\.yml|lang/en\.yml|studio/q/qevent/QEventPlugin\.class" >/dev/null
+          # The plugin must not bundle server or third-party classes.
+          if unzip -l "$JAR" | grep -E "net/kyori|com/google/gson|org/bukkit" >/dev/null; then
+            echo "The plugin JAR bundles classes it must not shade." >&2
+            exit 1
+          fi
+          echo "OK: $JAR ($(stat -c %s "$JAR") bytes)"
+
+      - name: Upload plugin JAR
+        if: matrix.java == '21'
+        uses: actions/upload-artifact@v4
+        with:
+          name: qEvent-1.0.0
+          path: target/qEvent-1.0.0.jar
+          if-no-files-found: error

@@ -1,0 +1,38 @@
+name: qEvent
+version: '${project.version}'
+main: studio.q.qevent.QEventPlugin
+api-version: '1.20'
+authors: [qSa3ed]
+website: https://github.com/qSa3ed-Studio/qEvent
+description: Cinematic event announcements that show the announcer's real Minecraft skin head.
+folia-supported: false
+
+commands:
+  event:
+    description: Broadcast a cinematic event announcement.
+    usage: |
+      /event announce <message>
+      /event announce <player> <message>
+      /event title <title> <subtitle>
+      /event preview
+      /event reload
+      /event help
+    aliases: [qevent, qe]
+
+permissions:
+  qevent.announce:
+    description: Allows broadcasting announcements and titles.
+    default: op
+  qevent.preview:
+    description: Allows previewing an announcement for yourself only.
+    default: op
+  qevent.reload:
+    description: Allows reloading the qEvent configuration and language files.
+    default: op
+  qevent.admin:
+    description: Grants every qEvent permission and bypasses the announcement cooldown.
+    default: op
+    children:
+      qevent.announce: true
+      qevent.preview: true
+      qevent.reload: true

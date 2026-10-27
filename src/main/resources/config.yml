@@ -1,0 +1,173 @@
+# ==========================================================================================
+#  qEvent - configuration
+#  Developed and published by qSa3ed Studio - https://github.com/qSa3ed-Studio/qEvent
+# ------------------------------------------------------------------------------------------
+#  TEXT FORMAT
+#  -----------
+#  Every text option accepts BOTH MiniMessage tags and classic legacy codes:
+#     <gold>Hello</gold>       <gradient:#FFD166:#FF6B6B><bold>EVENT</bold></gradient>
+#     &6Hello    &lBold    &#FF6B6Bclassic hex
+#
+#  PLACEHOLDERS
+#  ------------
+#     %announcer%   name of the announcer (or general.console-name for the console)
+#     %message%     the exact message supplied in /event announce
+#     %headline%    the first line of that message (useful for compact layouts)
+#     %duration%    announcement duration, in seconds
+#     %viewer%      name of the player who is reading the announcement
+#     %version%     installed qEvent version
+#
+#  Tiny floating heads in an HUD are not part of the vanilla/title API. qEvent renders the
+#  announcer's REAL head as a genuine player-head item on a per-viewer display entity that
+#  follows the camera, so the skin is always the announcer's own. See docs/RENDERING.md.
+# ==========================================================================================
+
+general:
+  # Language file to load from the plugin's lang/ folder (en, ...).
+  language: en
+  # Extra diagnostic output in the console. Enable when reporting a bug.
+  debug: false
+
+announcement:
+  # How long an announcement stays on screen, in ticks (20 ticks = 1 second).
+  duration-ticks: 120
+  # Minimum delay between two announcements from the same sender, in seconds.
+  cooldown-seconds: 10
+  queue:
+    # When true, an announcement requested while another one is running is queued instead
+    # of being rejected.
+    enabled: true
+    max-size: 3
+  # Longest accepted message, measured without formatting codes. Longer messages are
+  # rejected with a clear error instead of being silently truncated.
+  max-message-length: 220
+  # Send the announcement to the player who triggered it as well.
+  broadcast-to-announcer: true
+  # Name shown when the announcement comes from the server console.
+  console-name: '&bConsole'
+
+title:
+  # Big centred line at the top of the screen.
+  enabled: true
+  # Used for every player by default. Only vanilla-safe characters belong here.
+  template: '<gradient:#FFD166:#FF6B6B><bold>✦ EVENT ANNOUNCEMENT ✦</bold></gradient>'
+  # Used instead of 'template' for players who have the qEvent artwork pack loaded. The
+  # qevent:display font is part of that pack; if a player declines the pack they keep the
+  # template above, which is why this never shows missing-glyph boxes. Leave empty to always
+  # use 'template'.
+  pack-template: '<gradient:#FFD166:#FF6B6B><font:qevent:display>EVENT ANNOUNCEMENT</font></gradient>'
+  fade-in-ticks: 8
+  fade-out-ticks: 14
+
+subtitle:
+  # Second line, directly under the title. %message% is the text the admin typed.
+  enabled: true
+  template: '<white>%message%</white>'
+  # Used instead of 'template' for players with the artwork pack loaded.
+  pack-template: ''
+
+action-bar:
+  # Small line above the hotbar, used here for the announcer attribution.
+  enabled: true
+  template: '&7Announced by &f%announcer%'
+
+boss-bar:
+  # Optional extra surface: a progress bar with the message while the event lasts.
+  enabled: false
+  template: '<gold>%message%</gold>'
+  color: PURPLE # PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE
+  overlay: PROGRESS # PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
+  show-countdown: true
+
+sounds:
+  enabled: true
+  # Each entry is played for every viewer. delay-ticks is relative to the announcement start.
+  play:
+    - sound: minecraft:ui.toast.challenge_complete
+      volume: 0.9
+      pitch: 1.2
+      delay-ticks: 0
+    - sound: minecraft:block.beacon.activate
+      volume: 0.6
+      pitch: 1.0
+      delay-ticks: 6
+
+head:
+  enabled: true
+  # AUTO      - render the 3D head whenever the server supports it (all supported Paper
+  #             versions do), otherwise fall back to text only.
+  # ENTITY    - always try to render the head.
+  # TEXT_ONLY - never spawn a head entity; use the text-only presentation.
+  mode: AUTO
+  # What to do when the announcer's real skin cannot be retrieved:
+  #   SKIP_HEAD - keep the cinematic text announcement without any head.
+  #   TEXT_ONLY - same result, but logged explicitly in debug mode.
+  # A generic Steve/Alex head is never used as a substitute.
+  on-missing-skin: SKIP_HEAD
+  # Distance in blocks in front of the viewer's eyes where the head floats.
+  distance: 2.2
+  # Horizontal offset in blocks (positive = to the viewer's right).
+  offset-x: 0.0
+  # Vertical offset in blocks (negative = lower on the screen). Default sits below the text.
+  offset-y: -0.42
+  # Size multiplier of the head.
+  scale: 0.85
+  # Item model transform used to draw the head: HEAD renders a real 3D head.
+  item-transform: HEAD
+  # How the head faces the viewer: CENTER, FIXED, VERTICAL, HORIZONTAL.
+  billboard: CENTER
+  # Keep the head pinned to the same screen position while the viewer looks around.
+  follow-view: true
+  # Render the head fully lit, ignoring the light level where the viewer stands.
+  full-brightness: true
+  # Outline the head with a coloured glow.
+  glow: false
+
+animation:
+  # Ticks used by the entrance (grow / slide in) and the exit (shrink / slide out).
+  entrance-ticks: 8
+  exit-ticks: 10
+  # NONE, SCALE, SLIDE, SCALE_SLIDE
+  style: SCALE_SLIDE
+  # How far the head travels during a SLIDE animation, in blocks.
+  slide-distance: 0.6
+
+skin:
+  network:
+    # Allow qEvent to look up skins through the public Mojang API. Turning this off means
+    # only players who are online (whose skins the server already knows) get a head.
+    enabled: true
+    connect-timeout-ms: 3000
+    read-timeout-ms: 5000
+    # How long a resolved skin is cached on disk, in hours.
+    cache-hours: 24
+    api:
+      # %name% is replaced with the player name.
+      lookup: 'https://api.mojang.com/users/profiles/minecraft/%name%'
+      # %uuid% is replaced with the undashed UUID.
+      profile: 'https://sessionserver.mojang.com/session/minecraft/profile/%uuid%'
+  # Optional: a real player name whose head represents console announcements.
+  # Leave empty for text-only console announcements.
+  console-skin: ''
+
+resource-pack:
+  # qEvent's optional artwork pack adds the branded headline font and decorative glyphs.
+  # The announcement works perfectly without it; see docs/RESOURCE_PACK.md.
+  enabled: false
+  url: ''
+  # SHA-1 of the pack file. Required by clients on 1.20.3+ when the pack is marked required.
+  sha1: ''
+  # Mark the pack as required. Players who decline are kicked by the client.
+  required: false
+  prompt: '<gold>qEvent</gold> uses a small resource pack for its announcement artwork.'
+  # Send the pack to players as they join.
+  send-on-join: true
+  # Keep showing announcements (without the pack's artwork) when a player declines or the
+  # download fails. Turning this off hides the branded glyphs but never the announcement.
+  fallback-when-unavailable: true
+
+admin:
+  # qevent.admin bypasses the per-sender cooldown.
+  bypass-cooldown: true
+  # Write every announcement to the server log.
+  log-announcements: true

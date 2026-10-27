@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "pack_format": 46,
+    "supported_formats": {
+      "min_inclusive": 15,
+      "max_inclusive": 999
+    },
+    "description": "qEvent announcement artwork - qSa3ed Studio"
+  }
+}

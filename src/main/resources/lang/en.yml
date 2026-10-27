@@ -1,0 +1,43 @@
+# qEvent language file - qSa3ed Studio
+# Text accepts MiniMessage tags and legacy & codes. Placeholders are documented in config.yml.
+prefix: '<gradient:#FFD166:#FF6B6B><bold>qEvent</bold></gradient> <dark_gray>»</dark_gray> '
+
+command:
+  no-permission: '<red>You do not have permission to use this command.'
+  unknown-subcommand: '<red>Unknown subcommand <white>%input%</white>. Use <white>/event help</white>.'
+  players-only: '<red>Only a player can use that subcommand.'
+  announcement-in-progress: '<red>Another announcement is already running. Please wait.'
+  queue-full: '<red>The announcement queue is full (%max%).'
+  cooldown: '<red>Please wait <white>%seconds%s</white> before announcing again.'
+  message-too-long: '<red>That message is too long (<white>%length%</white>/<white>%max%</white> characters).'
+  message-empty: '<red>You must provide a message, title or subtitle.'
+  player-not-found: '<red>No player named <white>%name%</white> could be found.'
+  announce-sent: '<green>Announcement sent to <white>%viewers%</white> player(s).'
+  announce-queued: '<green>Another announcement is running; yours is queued at position <white>%position%</white>.'
+  title-usage: '<red>Usage: <white>/event title <title> <subtitle></white>'
+  preview-sent: '<green>Preview sent. Only you can see it.'
+  reloaded: '<green>Configuration and language files reloaded.'
+  reload-failed: '<red>Reload failed: <white>%error%</white>'
+  help:
+    - '<dark_gray><strikethrough>                                                  </strikethrough>'
+    - '<gradient:#FFD166:#FF6B6B><bold>qEvent</bold></gradient> <dark_gray>v%version%</dark_gray> <gray>by qSa3ed Studio</gray>'
+    - '<yellow>/event announce <message> <dark_gray>- <gray>announce to everyone with your own skin head'
+    - '<yellow>/event announce <player> <message> <dark_gray>- <gray>announce with another player''s head'
+    - '<yellow>/event title <title> <subtitle> <dark_gray>- <gray>custom title and subtitle'
+    - '<yellow>/event preview <dark_gray>- <gray>preview the announcement for yourself'
+    - '<yellow>/event reload <dark_gray>- <gray>reload config.yml and lang files'
+    - '<yellow>/event help <dark_gray>- <gray>show this help'
+    - '<gray>Permissions: <white>qevent.announce</white>, <white>qevent.preview</white>, <white>qevent.reload</white>, <white>qevent.admin</white>'
+    - '<dark_gray><strikethrough>                                                  </strikethrough>'
+
+preview:
+  message: 'This is how your event announcement will look!'
+
+console:
+  announcement: '<gray>[qEvent] <white>%announcer% <gray>announced: <white>%message%'
+
+skin:
+  resolving: '<dark_gray>[qEvent] <gray>Resolving skin of <white>%name%</white>...'
+  lookup-rate-limited: '<dark_gray>[qEvent] <red>Mojang denied the skin lookup (rate limited). Try again later.'
+  missing: '<dark_gray>[qEvent] <gray>No skin available for <white>%name%</white> - showing the announcement without a head.'
+  network-disabled: '<dark_gray>[qEvent] <gray>Skin lookups are disabled in config.yml - showing the announcement without a head.'

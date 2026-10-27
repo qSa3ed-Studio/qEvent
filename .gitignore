@@ -1,0 +1,44 @@
+# Build output
+target/
+*.jar
+!resourcepack/**/*.jar
+
+# Local Paper test servers, probe files and logs used during development
+.testservers/
+.probe/
+*.log
+logs/
+run/
+server.properties
+eula.txt
+ops.json
+whitelist.json
+banned-*.json
+usercache.json
+world/
+world_nether/
+world_the_end/
+
+# Tooling and editors
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+node_modules/
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secrets and local configuration that must never be published
+.env
+.env.*
+*.pem
+*.p12
+*.jks
+*.keystore
+secrets.yml
+local.yml
