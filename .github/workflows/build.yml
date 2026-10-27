@@ -36,9 +36,10 @@ jobs:
       - name: Validate the produced JAR
         run: |
           set -euo pipefail
-          JAR="target/qEvent-1.0.0.jar"
+          VERSION="$(sed -n 's/^[[:space:]]*<version>\(.*\)<\/version>[[:space:]]*$/\1/p' pom.xml | head -1)"
+          JAR="target/qEvent-${VERSION}.jar"
           test -f "$JAR"
-          unzip -p "$JAR" plugin.yml | grep -E "^version: '1\.0\.0'" >/dev/null
+          unzip -p "$JAR" plugin.yml | grep -E "^version: '${VERSION}'" >/dev/null
           unzip -p "$JAR" plugin.yml | grep -E "^main: studio\.q\.qevent\.QEventPlugin" >/dev/null
           unzip -l "$JAR" | grep -E "config\.yml|lang/en\.yml|studio/q/qevent/QEventPlugin\.class" >/dev/null
           # The plugin must not bundle server or third-party classes.
