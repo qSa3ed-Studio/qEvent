@@ -67,6 +67,10 @@ public final class Announcement {
         this.cues = new ArrayList<>(settings.sounds().cues());
         this.cues.sort(java.util.Comparator.comparingInt(PluginSettings.SoundCue::delayTicks));
         this.headSpawnPossible = settings.rendersHead() && ItemDisplayHead.isSupported();
+        if (settings.rendersHead() && !ItemDisplayHead.isSupported()) {
+            plugin.getLogger().warning("qEvent cannot render the announcer head on this server "
+                    + "(display entities are unavailable); showing the text announcement only.");
+        }
         this.bossBar = settings.bossBar().enabled()
                 ? BossBar.bossBar(TextFormatter.parse(baseTemplate(settings.bossBar().template())), 1.0f,
                 settings.bossBar().color(), settings.bossBar().overlay())
@@ -247,7 +251,8 @@ public final class Announcement {
         headSpawnTick = elapsed;
         Optional<ItemStack> item = HeadItems.create(skinLookup.profile().orElse(null));
         if (item.isEmpty()) {
-            plugin.debugLog("The resolved skin had no usable texture; continuing without a head.");
+            plugin.getLogger().warning("qEvent: the resolved skin of " + request.announcerName()
+                    + " had no usable texture; continuing without a head.");
             return;
         }
 
@@ -345,6 +350,8 @@ public final class Announcement {
 
     private void notifySkinProblem(SkinLookup.Reason reason) {
         String name = request.skinLookupName();
+        plugin.getLogger().warning("qEvent skipped the announcer head: skin lookup for '"
+                + (name == null ? "?" : name) + "' did not succeed (" + reason + ").");
         Map<String, String> placeholders = Map.of("name", TextFormatter.escape(name == null ? "" : name));
         switch (reason) {
             case DISABLED -> sendFeedback("skin.network-disabled", placeholders);

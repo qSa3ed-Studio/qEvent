@@ -108,10 +108,12 @@ head:
   distance: 2.2
   # Horizontal offset in blocks (positive = to the viewer's right).
   offset-x: 0.0
-  # Vertical offset in blocks (negative = lower on the screen). Default sits below the text.
-  offset-y: -0.42
+  # Vertical offset in blocks: POSITIVE raises the head towards the top of the screen,
+  # negative lowers it. The default sits high above the centre, next to the title text
+  # (tuned for the default FOV of 70; raise it a little if your players use a high FOV).
+  offset-y: 1.2
   # Size multiplier of the head.
-  scale: 0.85
+  scale: 0.55
   # Item model transform used to draw the head: HEAD renders a real 3D head.
   item-transform: HEAD
   # How the head faces the viewer: CENTER, FIXED, VERTICAL, HORIZONTAL.

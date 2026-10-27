@@ -4,6 +4,21 @@ All notable changes to qEvent are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] — 2026-10-27
+
+Position and diagnostics update.
+
+### Changed
+- The announcer head now defaults to the **top of the screen** next to the title
+  (`head.offset-y` default `-0.42` → `1.2`) with a smaller default size
+  (`head.scale` default `0.85` → `0.55`). Existing servers keep their saved values;
+  delete or update `head.offset-y` / `head.scale` in `config.yml` to pick up the new look.
+
+### Added
+- Console warnings when an announcement cannot render a head: unsupported runtime,
+  failed skin lookup (with the exact reason) or a textureless skin profile. Previously
+  these were only visible with `general.debug: true`.
+
 ## [1.0.0] — 2026-10-27
 
 First stable release.

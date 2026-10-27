@@ -35,7 +35,8 @@ class PluginSettingsTest {
         assertEquals(HeadMode.AUTO, settings.head().mode());
         assertEquals(MissingSkinBehaviour.SKIP_HEAD, settings.head().missingSkin());
         assertEquals(AnimationStyle.SCALE_SLIDE, settings.animation().style());
-        assertEquals(0.85f, settings.head().scale(), 0.0001f);
+        assertEquals(0.55f, settings.head().scale(), 0.0001f);
+        assertEquals(1.2, settings.head().offsetY(), 0.0001);
         assertFalse(settings.resourcePack().enabled(), "the resource pack is opt-in");
         assertNotNull(settings.title().packTemplate());
         assertTrue(warnings.isEmpty(), "defaults must not produce warnings: " + warnings);
