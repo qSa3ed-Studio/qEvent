@@ -140,3 +140,8 @@ Security issues: see [SECURITY.md](SECURITY.md) — please do not open a public 
 ## License
 
 MIT — see [LICENSE](LICENSE). © 2026 qSa3ed Studio.
+
+---
+
+Built with: Paper 1.20.6 API, Maven, [Paperweight](https://github.com/PaperMC/paperweight).
+Current developer build: 1.0.3.
