@@ -11,8 +11,8 @@ no separate compatibility JARs.
 |---|---|---|---|---|
 | 1.20.6 | `paper-1.20.6-151` | 21.0.11 (Zulu) | **Supported & tested** | Plugin loads and enables; `/event help`, `announce`, `title`, `preview` (console guard), `reload`, unknown-subcommand and empty-message errors all behave; Mojang skin lookup returned a signed skin; a per-viewer `item_display` head was spawned; the client received `set_title_text`, `set_title_subtitle` and `set_title_time` (8/98/14) packets; missing-skin fallback message shown for an unknown name; cooldown enforced with `admin.bypass-cooldown: false` |
 
-Unit tests (22) cover configuration parsing/clamping, text formatting and escaping, version parsing
-and SHA-1 decoding; they run in `mvn test` and in CI on every push.
+Unit tests (25) cover configuration parsing/clamping, safe legacy config migration, text formatting and escaping,
+version parsing and SHA-1 decoding; they run in `mvn test` and in CI on every push.
 
 ## Untested — expected to work, not verified here
 

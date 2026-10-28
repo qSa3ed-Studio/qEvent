@@ -28,6 +28,13 @@ For every viewer, qEvent:
    (`Viewport`), which pins it to a fixed spot on screen while the player looks around;
 5. interpolates `Transformation` scale/translation for the entrance and exit animations.
 
+The vertical anchor is deliberately conservative. Minecraft's vertical field of view is narrower
+than its horizontal field of view on common widescreen displays; an offset that looks small in
+blocks can place the head completely above the visible frame. The default (`distance: 2.2`,
+`offset-y: 0.45`, `scale: 0.8`) is calibrated to keep the head in the upper screen area on typical
+16:9 setups. It is still affected by client FOV and aspect ratio, so server owners can adjust those
+three settings if their clients use unusual display settings.
+
 Because the entity is short-lived and removed in `cleanup()`, nothing is left behind — even if the
 plugin is disabled mid-announcement (`onDisable` → `AnnouncementService.shutdown()`).
 

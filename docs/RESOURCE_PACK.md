@@ -36,14 +36,14 @@ pack-template: '<gradient:#FFD166:#FF6B6B><font:qevent:display>EVENT ANNOUNCEMEN
 
 ```bash
 cd resourcepack
-jar --create --file ../qEvent-ResourcePack-1.0.0.zip .
+jar --create --file ../qEvent-ResourcePack.zip .
 cd ..
-sha1sum qEvent-ResourcePack-1.0.0.zip        # put this in config.yml
+sha1sum qEvent-ResourcePack.zip        # put this in config.yml
 ```
 
 Host the ZIP anywhere with a **public, direct HTTPS link** (your own CDN, a static file host, or a
 GitHub Release asset such as
-`https://github.com/qSa3ed-Studio/qEvent/releases/download/v1.0.0/qEvent-ResourcePack-1.0.0.zip`).
+`https://github.com/qSa3ed-Studio/qEvent/releases/download/v1.0.1/qEvent-ResourcePack-1.0.0.zip`).
 Do not link to an HTML download page — the client needs the file itself.
 
 Then in `config.yml`:
@@ -51,7 +51,7 @@ Then in `config.yml`:
 ```yaml
 resource-pack:
   enabled: true
-  url: 'https://…/qEvent-ResourcePack-1.0.0.zip'
+  url: 'https://…/qEvent-ResourcePack.zip'
   sha1: '<40 hex characters from sha1sum>'
   required: false          # false = players may decline; true = they are kicked if they decline
   prompt: '<gold>qEvent</gold> uses a small resource pack for its announcement artwork.'

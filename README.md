@@ -27,8 +27,8 @@ Minecraft head** floating in front of the viewer's camera.
 - Skin resolution: online profile → local cache → Mojang API (async, with timeouts and a disk cache).
 - Configurable duration, colors, MiniMessage **and** legacy `&` formatting, gradients, animation style,
   sounds, head position/scale, resource-pack delivery, language file, cooldown and queueing.
-- Optional artwork resource pack (branded display font + glyphs) with graceful fallback for players
-  who decline it — see [docs/RESOURCE_PACK.md](docs/RESOURCE_PACK.md).
+- Official artwork resource pack offered on join by default (branded display font + glyphs), with a
+  graceful fallback for players who decline it — see [docs/RESOURCE_PACK.md](docs/RESOURCE_PACK.md).
 - No NMS, no scoreboard spam, no chat broadcast — one plugin, one JAR.
 
 ---
@@ -49,8 +49,9 @@ Minecraft head** floating in front of the viewer's camera.
 2. Drop it into your server's `plugins/` folder.
 3. Start the server. `config.yml` and `lang/en.yml` are generated on first start.
 4. Stop the server, edit `plugins/qEvent/config.yml`, start again (or run `/event reload`).
-5. Optional: publish `resourcepack/qEvent-ResourcePack-1.0.0.zip` (or a `dist/` build) on your own
-   host and set `resource-pack.url` + `resource-pack.sha1`.
+5. The official artwork resource pack is offered automatically on join by default. Keep it enabled
+   and accept the prompt; the pack adds branded font/decorations. The real skin head is rendered by
+   the plugin, not the pack. You can disable the pack under `resource-pack.enabled` if desired.
 
 ```bash
 mvn -B package          # builds target/qEvent-<version>.jar and runs the unit tests

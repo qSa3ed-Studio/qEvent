@@ -4,6 +4,18 @@ All notable changes to qEvent are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.0.2] — 2026-10-28
+
+Visibility and first-run resource-pack repair. (Default head position: `0.45`, scale: `0.8`.)
+
+### Fixed
+- Moved the head into the visible upper screen area. The previous `offset-y: 1.2` could push it
+  outside the vertical field of view on common 16:9 setups, making it look missing.
+- Increased the default head scale from `0.55` to `0.8` for clear visibility.
+- Existing configs now migrate the shipped old position/size defaults while preserving custom values.
+- New installs and unconfigured older installs now receive the permanent official artwork pack URL
+  and verified SHA-1. The resource pack adds fonts/decorations only; the real skin head is an entity.
+
 ## [1.0.1] — 2026-10-27
 
 Position and diagnostics update.

@@ -1,3 +1,6 @@
+# qEvent configuration schema version. Managed by qEvent; do not edit.
+qevent-config-version: 2
+
 # ==========================================================================================
 #  qEvent - configuration
 #  Developed and published by qSa3ed Studio - https://github.com/qSa3ed-Studio/qEvent
@@ -108,12 +111,13 @@ head:
   distance: 2.2
   # Horizontal offset in blocks (positive = to the viewer's right).
   offset-x: 0.0
-  # Vertical offset in blocks: POSITIVE raises the head towards the top of the screen,
-  # negative lowers it. The default sits high above the centre, next to the title text
-  # (tuned for the default FOV of 70; raise it a little if your players use a high FOV).
-  offset-y: 1.2
-  # Size multiplier of the head.
-  scale: 0.55
+  # Vertical offset in blocks: POSITIVE raises the head; negative lowers it. Keep this
+  # modest: too much offset pushes the head outside the vertical FOV, making it invisible.
+  # 0.45 at 2.2 blocks puts it above the title while keeping it inside a typical 16:9 view.
+  # Unusual FOV/aspect ratios may need a small adjustment.
+  offset-y: 0.45
+  # Size multiplier of the head. 0.8 keeps the skin clearly visible without dominating.
+  scale: 0.8
   # Item model transform used to draw the head: HEAD renders a real 3D head.
   item-transform: HEAD
   # How the head faces the viewer: CENTER, FIXED, VERTICAL, HORIZONTAL.
@@ -154,11 +158,12 @@ skin:
 
 resource-pack:
   # qEvent's optional artwork pack adds the branded headline font and decorative glyphs.
-  # The announcement works perfectly without it; see docs/RESOURCE_PACK.md.
-  enabled: false
-  url: ''
-  # SHA-1 of the pack file. Required by clients on 1.20.3+ when the pack is marked required.
-  sha1: ''
+  # It does not contain player heads; real skin heads are rendered separately by the plugin.
+  # You can disable this if you only want the default Minecraft font.
+  enabled: true
+  url: 'https://github.com/qSa3ed-Studio/qEvent/releases/download/v1.0.1/qEvent-ResourcePack-1.0.0.zip'
+  # SHA-1 of the official pack file; verifies the download on supported clients.
+  sha1: 'b56a93891f1afd73c4321952296634ec777623ab'
   # Mark the pack as required. Players who decline are kicked by the client.
   required: false
   prompt: '<gold>qEvent</gold> uses a small resource pack for its announcement artwork.'

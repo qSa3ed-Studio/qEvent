@@ -14,7 +14,8 @@ RCON_PASSWORD="qevent-test"
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SERVER_DIR="${ROOT}/.testservers/${VERSION}"
-JAR_SOURCE="$(ls "${ROOT}"/target/qEvent-*.jar 2>/dev/null | head -1)"
+PLUGIN_VERSION="$(sed -n 's/^[[:space:]]*<version>\(.*\)<\/version>[[:space:]]*$/\1/p' "${ROOT}/pom.xml" | head -1)"
+JAR_SOURCE="${ROOT}/target/qEvent-${PLUGIN_VERSION}.jar"
 PAPER_JAR="${ROOT}/.testservers/jars/paper-${VERSION}.jar"
 
 if [[ ! -f "${JAR_SOURCE}" ]]; then
@@ -28,7 +29,7 @@ fi
 
 mkdir -p "${SERVER_DIR}/plugins"
 cp -f "${PAPER_JAR}" "${SERVER_DIR}/paper.jar"
-cp -f "${JAR_SOURCE}" "${SERVER_DIR}/plugins/qEvent-1.0.0.jar"
+cp -f "${JAR_SOURCE}" "${SERVER_DIR}/plugins/qEvent-${PLUGIN_VERSION}.jar"
 echo "eula=true" > "${SERVER_DIR}/eula.txt"
 
 cat > "${SERVER_DIR}/server.properties" <<EOF

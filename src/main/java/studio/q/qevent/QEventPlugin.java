@@ -5,6 +5,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import studio.q.qevent.announce.AnnouncementService;
 import studio.q.qevent.command.EventCommand;
+import studio.q.qevent.config.ConfigMigrator;
 import studio.q.qevent.config.Messages;
 import studio.q.qevent.config.PluginSettings;
 import studio.q.qevent.listener.PlayerConnectionListener;
@@ -31,6 +32,14 @@ public final class QEventPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        ConfigMigrator.Result migration = ConfigMigrator.migrate(getConfig());
+        if (migration.migrated()) {
+            saveConfig();
+            if (migration.defaultsUpdated()) {
+                getLogger().info("Updated qEvent defaults: moved the head into the visible upper screen area "
+                        + "and enabled the official artwork pack. Custom config values were preserved.");
+            }
+        }
         serverVersion = ServerVersion.current();
 
         try {

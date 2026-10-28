@@ -211,8 +211,8 @@ public record PluginSettings(
                         MissingSkinBehaviour.SKIP_HEAD, "head.on-missing-skin", warn),
                 clamp(config.getDouble("head.distance", 2.2), 0.5, 16.0, "head.distance", warn),
                 clamp(config.getDouble("head.offset-x", 0.0), -8.0, 8.0, "head.offset-x", warn),
-                clamp(config.getDouble("head.offset-y", 1.2), -8.0, 8.0, "head.offset-y", warn),
-                (float) clamp(config.getDouble("head.scale", 0.55), 0.05, 8.0, "head.scale", warn),
+                clamp(config.getDouble("head.offset-y", 0.45), -8.0, 8.0, "head.offset-y", warn),
+                (float) clamp(config.getDouble("head.scale", 0.8), 0.05, 8.0, "head.scale", warn),
                 enumValue(ItemDisplay.ItemDisplayTransform.class, config.getString("head.item-transform"),
                         ItemDisplay.ItemDisplayTransform.HEAD, "head.item-transform", warn),
                 enumValue(Display.Billboard.class, config.getString("head.billboard"),
@@ -245,9 +245,10 @@ public record PluginSettings(
         );
 
         var resourcePack = new ResourcePackSection(
-                config.getBoolean("resource-pack.enabled", false),
-                config.getString("resource-pack.url", ""),
-                config.getString("resource-pack.sha1", ""),
+                config.getBoolean("resource-pack.enabled", true),
+                config.getString("resource-pack.url",
+                        "https://github.com/qSa3ed-Studio/qEvent/releases/download/v1.0.1/qEvent-ResourcePack-1.0.0.zip"),
+                config.getString("resource-pack.sha1", "b56a93891f1afd73c4321952296634ec777623ab"),
                 config.getBoolean("resource-pack.required", false),
                 config.getString("resource-pack.prompt", "<gold>qEvent</gold> uses a small resource pack."),
                 config.getBoolean("resource-pack.send-on-join", true),
