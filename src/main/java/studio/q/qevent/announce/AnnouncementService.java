@@ -257,6 +257,26 @@ public final class AnnouncementService {
         if (broadcast != null) {
             broadcast.hideDisplaysFrom(player);
         }
+        warmSkinCache(player);
+    }
+
+    /**
+     * Resolves a joining player's skin in the background so it is already cached by the time
+     * they run {@code /event announce}. Without this the first announcement pays for the whole
+     * network lookup while it is on screen, and a slow lookup can outlive the announcement.
+     */
+    private void warmSkinCache(Player player) {
+        if (!settings.rendersHead()) {
+            return;
+        }
+        try {
+            skins.resolve(player.getName(), player.getUniqueId(), player)
+                    .thenAccept(lookup -> plugin.debugLog("Warm cache for " + player.getName()
+                            + ": " + lookup.reason() + "."));
+        } catch (RuntimeException exception) {
+            plugin.getLogger().log(java.util.logging.Level.FINE,
+                    "Could not warm the skin cache for " + player.getName(), exception);
+        }
     }
 
     /** Cleans up when a viewer or an announcer disconnects. */

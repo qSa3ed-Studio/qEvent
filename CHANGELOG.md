@@ -4,6 +4,24 @@ All notable changes to qEvent are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.0.3] — 2026-10-28
+
+Offline-mode head fix and visible resource-pack diagnostics.
+
+### Fixed
+- **Offline-mode servers (`online-mode=false`) now get a real head.** qEvent used the player's
+  offline UUID for the sessionserver lookup; Mojang does not know it and returned "no profile",
+  so the announcer's head was silently skipped. When the supplied UUID is unknown, the lookup now
+  falls back to the username and resolves the real Mojang account.
+- The resolved skin is also cached under the originally requested offline UUID, so later
+  announcements are served from cache instead of calling Mojang again.
+
+### Added
+- A malformed `resource-pack.sha1` (anything that is not exactly 40 hex characters) is now warned
+  about on join, instead of only when the pack is marked required.
+- A failed resource-pack download/apply is now a console warning per player, instead of being
+  hidden behind `general.debug: true`.
+
 ## [1.0.2] — 2026-10-28
 
 Visibility and first-run resource-pack repair. (Default head position: `0.45`, scale: `0.8`.)

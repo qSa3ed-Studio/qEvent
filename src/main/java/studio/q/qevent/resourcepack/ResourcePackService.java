@@ -8,6 +8,7 @@ import studio.q.qevent.util.TextFormatter;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -44,6 +45,9 @@ public final class ResourcePackService {
 
     private final QEventPlugin plugin;
     private final Map<UUID, Status> statuses = new ConcurrentHashMap<>();
+    private final Set<UUID> warnedFailures = ConcurrentHashMap.newKeySet();
+
+    private boolean warnedAboutSha1;
 
     private volatile PluginSettings.ResourcePackSection settings;
 
@@ -55,6 +59,8 @@ public final class ResourcePackService {
     public void applySettings(PluginSettings updated) {
         this.settings = updated.resourcePack();
         statuses.clear();
+        warnedFailures.clear();
+        warnedAboutSha1 = false;
     }
 
     /** True when this player has the artwork pack fully loaded. */
@@ -82,7 +88,15 @@ public final class ResourcePackService {
         }
 
         byte[] hash = parseSha1(settings.sha1());
-        if (hash == null && settings.required()) {
+        boolean sha1Provided = settings.sha1() != null && !settings.sha1().isBlank();
+        if (sha1Provided && hash == null && !warnedAboutSha1) {
+            warnedAboutSha1 = true;
+            plugin.getLogger().warning("resource-pack.sha1 is not a valid SHA-1: it must be exactly 40 "
+                    + "hex characters (0-9a-f), but the configured value has "
+                    + settings.sha1().trim().length() + " characters. The client cannot verify the "
+                    + "artwork pack download - fix resource-pack.sha1 in config.yml.");
+        } else if (hash == null && settings.required() && !warnedAboutSha1) {
+            warnedAboutSha1 = true;
             plugin.getLogger().warning("resource-pack.required is true but resource-pack.sha1 is missing or invalid; "
                     + "clients on 1.20.3+ cannot verify the pack and may refuse it.");
         }
@@ -112,8 +126,13 @@ public final class ResourcePackService {
             default -> Status.UNKNOWN;
         };
         statuses.put(player.getUniqueId(), status);
-        if (status == Status.DECLINED || status == Status.FAILED) {
-            plugin.debugLog("Resource pack " + status.name().toLowerCase() + " for " + player.getName()
+        if (status == Status.FAILED && warnedFailures.add(player.getUniqueId())) {
+            plugin.getLogger().warning("The qEvent artwork resource pack failed to download or apply for "
+                    + player.getName() + ". Announcements keep working with the default Minecraft font. "
+                    + "resource-pack.url must link the ZIP file directly and resource-pack.sha1 must be "
+                    + "its exact 40-character SHA-1.");
+        } else if (status == Status.DECLINED) {
+            plugin.debugLog("Resource pack declined for " + player.getName()
                     + "; announcements will use the fallback artwork.");
         }
     }
@@ -121,6 +140,7 @@ public final class ResourcePackService {
     /** Forgets a player who disconnected. */
     public void forget(UUID playerId) {
         statuses.remove(playerId);
+        warnedFailures.remove(playerId);
     }
 
     /** Human readable summary used by {@code /event help} style diagnostics. */

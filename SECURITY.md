@@ -29,6 +29,7 @@ We aim to acknowledge reports within 7 days.
 
 | Version | Supported |
 |---|---|
+| 1.0.3 | ✅ |
 | 1.0.2 | ✅ |
 | 1.0.1 | ✅ |
 | 1.0.0 | ✅ |

@@ -203,21 +203,54 @@ public final class SkinResolver implements AutoCloseable {
         try {
             UUID uuid = knownId;
             String resolvedName = name;
-            if (uuid == null) {
+            boolean usedOfflineUuid = false;
+            if (uuid == null || looksOfflineGenerated(uuid)) {
+                // A version-3 UUID is name-derived: online-mode=false servers hand Bukkit one of
+                // those for every player, and Mojang has no record of it. Asking the sessionserver
+                // about it only burns a round trip on a request that always returns 204, so go
+                // straight to the username lookup when we have a name to ask with.
+                if (name == null || name.isBlank()) {
+                    if (uuid == null) {
+                        return SkinLookup.missing(SkinLookup.Reason.DISABLED);
+                    }
+                } else {
+                    LookupResponse lookup = lookupByName(name, section);
+                    if (lookup.error() != null) {
+                        return SkinLookup.missing(lookup.error(), lookup.detail());
+                    }
+                    uuid = lookup.uuid();
+                    resolvedName = lookup.name();
+                    usedOfflineUuid = true;
+                }
+            }
+
+            SkinProfile profile = uuid == null ? null : lookupProfile(uuid, resolvedName, section);
+
+            // The supplied UUID can be an offline-mode UUID (online-mode=false), which Bukkit
+            // derives from the username and Mojang has no record of. When that lookup finds
+            // nothing, resolve the real account from the username instead, otherwise the
+            // announcer would silently never get a head.
+            if (profile == null && !usedOfflineUuid && name != null && !name.isBlank()) {
                 LookupResponse lookup = lookupByName(name, section);
                 if (lookup.error() != null) {
                     return SkinLookup.missing(lookup.error(), lookup.detail());
                 }
                 uuid = lookup.uuid();
                 resolvedName = lookup.name();
+                profile = lookupProfile(uuid, resolvedName, section);
             }
 
-            SkinProfile profile = lookupProfile(uuid, resolvedName, section);
             if (profile == null) {
                 return SkinLookup.missing(SkinLookup.Reason.NOT_FOUND,
                         "the profile has no signed textures property");
             }
-            cache(profile);
+            CachedSkin entry = cache(profile);
+            if (knownId != null && !knownId.equals(profile.uuid())) {
+                // Also remember it under the originally requested (offline-mode) UUID so the
+                // next announcement is served from cache instead of hitting Mojang again.
+                memoryCache.put(knownId, entry);
+                writeCacheFile(knownId, entry);
+            }
             return SkinLookup.found(profile, SkinLookup.Reason.NETWORK);
         } catch (RateLimitedException exception) {
             return SkinLookup.missing(SkinLookup.Reason.RATE_LIMITED);
@@ -292,18 +325,31 @@ public final class SkinResolver implements AutoCloseable {
         return httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
     }
 
-    private void cache(SkinProfile profile) {
+    private CachedSkin cache(SkinProfile profile) {
         CachedSkin entry = new CachedSkin(profile.uuid(), profile.name(), profile.value(), profile.signature(),
                 Instant.now().getEpochSecond());
         memoryCache.put(profile.uuid(), entry);
-        Path file = cacheFile(profile.uuid());
+        writeCacheFile(profile.uuid(), entry);
+        pruneCache();
+        return entry;
+    }
+
+    private void writeCacheFile(UUID key, CachedSkin entry) {
+        Path file = cacheFile(key);
         try {
             Files.createDirectories(cacheDirectory);
             Files.writeString(file, entry.toJson(), StandardCharsets.UTF_8);
-            pruneCache();
         } catch (IOException exception) {
             plugin.getLogger().log(Level.FINE, "Could not write the skin cache entry.", exception);
         }
+    }
+
+    /**
+     * True for a name-derived UUID (version 3). Bukkit generates those in {@code online-mode=false}
+     * servers and Mojang's sessionserver never knows them; real Mojang accounts are version 4.
+     */
+    private static boolean looksOfflineGenerated(UUID uuid) {
+        return uuid.version() == 3;
     }
 
     private void pruneCache() {
